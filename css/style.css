@@ -1,0 +1,21 @@
+.profile-pic{
+	max-width: 80%;
+}
+
+.brandimage {
+	/*max-width: 5%;*/
+	width: 20px;
+}
+
+h1 {
+	font-family: "Lobster", cursive;
+}
+
+i {
+	color: black;
+}
+
+.mymap {
+	min-width: 90%;
+	height: 450px;
+}
