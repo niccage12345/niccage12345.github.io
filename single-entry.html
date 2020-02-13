@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <nav>
+    <a href="diary.html">Home</a>
+    <a href="create-entry.html">Create entry</a>
+  </nav>
+  <h1 id="title">Loading&hellip;</h1>
+  <div id="content"></div>
+
+
+<!-- This tag renders just one single diary post! -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const titleH1 = document.querySelector('#title');
+      const content = document.querySelector('#content');
+      // this is a dirty hack 🤮
+      const id = location.search.slice('?id='.length);
+      const url = `https://hamzahc1.pythonanywhere.com/diaryentry/${id}`;
+      fetch(url)
+      .then(r => r.json())
+      .then(res => {
+        const entry = res.data;
+        const entryHTML = `
+          <div>
+            <h3>${entry.title}</h3>
+            <h4>Published: ${new Date(entry.createdat).toDateString()}</h4>
+            <p>${entry.description}</p>
+            <hr />
+          </div>
+        `;
+        titleH1.innerHTML = entry.title
+        content.innerHTML = entryHTML;
+      })
+    });
+  </script>
+</body>
+</html>

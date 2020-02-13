@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="diary.html">Diary </a>
+    <a href="index.html">Home</a>
+    <a href="#">Create entry</a>
+  </nav>
+  <h1>Create diary entry</h1>
+  <div id="success-msg" class="hidden" style="color: teal">Entry created - <a href="/" id="new-entry-link">view</a></div>
+  <form id="diary-form" action="#">
+    <label for="title">Entry title:</label>
+    <input type="text" name="title">
+    <br/>
+    <label for="description">Entry text:</label>
+    <textarea name="description"></textarea>
+    <br/>
+    <input type="submit" value="Save">
+  </form>
+</body>
+
+
+<!-- This script tag powers our form by sending the information to the API once you've cliked submit!  -->
+<script>
+  const url = 'https://hamzahc1.pythonanywhere.com/diaryentry';
+
+  document.querySelector('#diary-form').addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    console.log(ev);
+
+    const data = {
+      title: ev.target.elements[0].value,
+      description: ev.target.elements[1].value,
+    }
+
+    fetch(url, {
+      method: 'post',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.id) {
+        document.querySelector('#success-msg').classList.remove('hidden');
+        document.querySelector('#new-entry-link').setAttribute('href', `/single-entry.html?id=${res.id}`);
+      }
+    })
+  });
+</script>
+</html>

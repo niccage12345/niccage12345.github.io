@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Lobster|Modak|Odibee+Sans&display=swap" rel="stylesheet">
+
+
+
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <title>Document</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html"><img class="brandimage" src="img/brandicon.jpg"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav w-100c">
+        <a class="nav-item nav-link active" href="index.html">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="about.html">About</a>
+        <a class="nav-item nav-link" href="create-entry.html">Create Entry</a>
+        <a class="nav-item nav-link" href="diary.html">Diary</a>
+        <div class="ml-auto">
+         <a class="nav-item nav-link" href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+<div class="container">
+  <h1>My diary</h1>
+
+  <div id="diary-entries">
+    <h3>Loading entries&hellip;</h3>
+  </div>
+
+
+<!-- Don't worry too much about what's written in the section below this in the <script tags> for now. It represents Javascript code that calls our API and returns the diary entries to our HTML page (above!) -->
+  <script>
+    const url = 'https://hamzahc1.pythonanywhere.com/diaryentry';
+    document.addEventListener("DOMContentLoaded", () => {
+      const diaryEntries = document.querySelector('#diary-entries');
+      fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const ids = Object.keys(data.entries)
+        const sortedEntries = ids.sort((a, b) => new Date(data.entries[a]).getTime() - new Date(data.entries[b]).getTime());
+        const entriesContent = ids.map(id => `
+          <div>
+            <h3>${data.entries[id].title}</h3>
+            <a href="single-entry.html?id=${id}">view</a>
+            <h4>Published: ${new Date(data.entries[id].createdat).toDateString()} - ${new Date(data.entries[id].createdat).toLocaleTimeString()}</h4>
+            <p>${data.entries[id].description}</p>
+            <hr />
+          </div>
+        `);
+        diaryEntries.innerHTML = entriesContent;
+      })
+    });
+  </script>
+</div>
+</body>
+</html>
